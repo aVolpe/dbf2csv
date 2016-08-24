@@ -22,18 +22,22 @@ public class Dbf2CSV {
 
 	public static void main(String[] args) throws Exception {
 
-		if (args.length != 2) {
+		if (args.length != 1) {
 			printUsage();
 			return;
 		}
 
-		new Dbf2CSV().doIt(args[1]);
+		new Dbf2CSV().doIt(args[0]);
 	}
 
 	private static void printUsage() {
 
-		System.out.println("Usage: java dbf2csv SOURCE" + "\n This will create a file with "
-				+ "\n the same name but with the " + "\n extension CSV in the source folder.");
+		System.out.println("-------------------------------------------");
+		System.out.println("[ERROR] Usage: mvn exec:java -Dexec.args=SOURCE");
+		System.out.println("[ERROR] This will create a file with ");
+		System.out.println("[ERROR] the same name but with the ");
+		System.out.println("[ERROR] extension CSV in the source folder.");
+		System.out.println("-------------------------------------------");
 
 	}
 
@@ -47,6 +51,7 @@ public class Dbf2CSV {
 	}
 
 	protected List<String> toCSV(Path file) {
+		System.out.println("Processing: " + file.toString());
 		try (InputStream fis = Files.newInputStream(file)) {
 			DbfRecord rec;
 			try (DbfReader reader = new DbfReader(fis)) {
@@ -75,7 +80,9 @@ public class Dbf2CSV {
 	}
 
 	private static void write(Result result) {
-		try (FileWriter fw = new FileWriter(PATH + "/" + result.name)) {
+		String filename = PATH + "/" + result.name;
+		System.out.println("Writing " + filename);
+		try (FileWriter fw = new FileWriter(filename)) {
 			BufferedWriter bw = new BufferedWriter(fw);
 			for (String s : result.lines) {
 				bw.write(s);
