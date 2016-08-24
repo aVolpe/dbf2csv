@@ -18,8 +18,6 @@ import net.iryndin.jdbf.reader.DbfReader;
 
 public class Dbf2CSV {
 
-	public static final String PATH = "/home/avolpe/develop/cds/DBF/sources";
-
 	public static void main(String[] args) throws Exception {
 
 		if (args.length != 1) {
