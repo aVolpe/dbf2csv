@@ -25,7 +25,13 @@ public class Dbf2CSV {
 			return;
 		}
 
-		new Dbf2CSV().doIt(args[0]);
+		new Dbf2CSV(args[0]).doIt();
+	}
+
+	String path;
+
+	public Dbf2CSV(String string) {
+		this.path = string;
 	}
 
 	private static void printUsage() {
@@ -39,13 +45,13 @@ public class Dbf2CSV {
 
 	}
 
-	public void doIt(String folder) throws Exception {
+	public void doIt() throws Exception {
 
-		Files.walk(Paths.get(folder))
+		Files.walk(Paths.get(path))
 				.filter(Files::isRegularFile)
 				.filter(f -> f.toString().endsWith("dbf"))
 				.map(file -> new Result(file.getFileName(), toCSV(file)))
-				.forEach(Dbf2CSV::write);
+				.forEach(this::write);
 	}
 
 	protected List<String> toCSV(Path file) {
@@ -77,8 +83,8 @@ public class Dbf2CSV {
 		}
 	}
 
-	private static void write(Result result) {
-		String filename = PATH + "/" + result.name;
+	private void write(Result result) {
+		String filename = path + "/" + result.name;
 		System.out.println("Writing " + filename);
 		try (FileWriter fw = new FileWriter(filename)) {
 			BufferedWriter bw = new BufferedWriter(fw);
